@@ -17,6 +17,17 @@ function Sistema(){
     this.usuarioActivo=function(nick){
         return nick in this.usuarios
     }
+
+    this.deleteUsuario=function(nick){
+        if(!this.usuarios[nick]){
+            console.log("No se puede borrar, no existe usuario con estos datos")
+        
+        }
+        else{
+            delete this.usuarios[nick]
+            console.log("Se ha eliminado el usuario"+ nick)
+        }
+    }
 }
    function Usuario(nick){
     this.nick=nick;
