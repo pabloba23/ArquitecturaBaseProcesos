@@ -33,3 +33,4 @@ function Sistema(){
     this.nick=nick;
    }
  
+   module.exports.Sistema=Sistema
