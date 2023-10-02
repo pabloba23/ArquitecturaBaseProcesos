@@ -14,6 +14,14 @@ app.get("/", function(request,response){
     response.send(contenido);
     
 });
+
+app.get("/agregarUsuario/:nick",function(request,response){
+    let nick=request.params.nick;
+    let res=sistema.agregarUsuario(nick);
+    response.send(res);
+    });
+
+    
 app.listen(PORT, () => {
 console.log(`App está escuchando en el puerto ${PORT}`);
 console.log('Ctrl+C para salir');
