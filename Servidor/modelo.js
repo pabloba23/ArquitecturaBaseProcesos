@@ -20,22 +20,35 @@ function Sistema(){
         }
 
     this.usuarioActivo=function(nick){
-        return nick in this.usuarios
+        let res={"activo":-1};
+        if(nick in this.usuarios){
+            console.log("el nick "+nick+" esta activo")
+            res.activo=true;
+            return res;
+
+        }
+        else{
+            console.log("el nick "+nick+" no esta activo")
+            res.activo=false;
+            return res;
+        }
     }
 
     this.deleteUsuario=function(nick){
         if(!this.usuarios[nick]){
-            console.log("No se puede borrar, no existe usuario con estos datos")
-        
+            return ("No se puede borrar, no existe usuario con estos datos")
+            
         }
         else{
             delete this.usuarios[nick]
-            console.log("Se ha eliminado el usuario"+ nick)
+            return ("Se ha eliminado el usuario "+ nick)
         }
     }
     this.numeroUsuarios = function() {
+        let res={"num":-1};
         // Contar el número de usuarios (claves) en el objeto usuarios
-        return Object.keys(this.usuarios).length;
+        res.num = Object.keys(this.usuarios).length;
+        return res;
     }
 }
    function Usuario(nick){
