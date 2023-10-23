@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "node index.js test=false",
+    "dev": "nodemon index.js test=false",
     "testW": "node_modules\\.bin\\jasmine-node Servidor",
     "test": "./node_modules/.bin/jasmine-node Servidor"
   },
@@ -19,10 +20,16 @@
   },
   "homepage": "https://github.com/pabloba23/ArquitecturaBaseProcesos#readme",
   "dependencies": {
+    "body-parser": "^1.20.2",
+    "cookie-session": "^2.0.0",
     "express": "^4.18.2",
-    "jasmine-node": "^3.0.0"
+    "jasmine-node": "^3.0.0",
+    "mongodb": "^4.4.0",
+    "passport": "^0.5.3",
+    "passport-google-oauth20": "^2.0.0"
   },
   "devDependencies": {
-    "jasmine": "^5.1.0"
+    "jasmine": "^5.1.0",
+    "nodemon": "^3.0.1"
   }
 }

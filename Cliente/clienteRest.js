@@ -5,11 +5,13 @@ function ClienteRest(){
     let msg="";
     if (data.nick!=-1){
     console.log("Usuario "+nick+" ha sido registrado");
-    msg="Usuario "+nick+ "ha sigo registrado";
+    msg=="Bienvenido al sistema, "+nick;
+    localStorage.setItem("nick",nick);
     }
     else{
     console.log("El nick ya está ocupado");
     msg="El nick ya está ocupado";
+
     }
         //Se dibuja la espera la ruleta de carga por ej
         cw.mostrarMsg(msg);
@@ -78,5 +80,34 @@ function ClienteRest(){
                 //Se dibuja la espera la ruleta de carga por ej
                 
     }
+
+    this.enviarJwt=function(jwt){
+        $.ajax({
+        type:'POST',
+        url:'/enviarJwt',
+        data: JSON.stringify({"jwt":jwt}),
+        success:function(data){
+        let msg="El nick "+nick+" está ocupado";
+        if (data.nick!=-1){
+        console.log("Usuario "+data.nick+" ha sido registrado");
+        msg="Bienvenido al sistema, "+data.nick;
+        $.cookie("nick",data.nick);
+        }
+        else{
+
+        console.log("El nick ya está ocupado");
+        }
+        cw.limpiar();
+        cw.mostrarMsg(msg);
+        },
+        error:function(xhr, textStatus, errorThrown){
+        //console.log(JSON.parse(xhr.responseText));
+        console.log("Status: " + textStatus);
+        console.log("Error: " + errorThrown);
+        },
+        contentType:'application/json'
+        //dataType:'json'
+        });
+        }
 
 }

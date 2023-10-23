@@ -1,5 +1,11 @@
-function Sistema(){
+const datos = require("./cad.js");
+
+function Sistema(test){
     this.usuarios={};  //this.usuarios=[]   esto seria un array normal basado en indices pero al usar {} es como un diccionario
+
+    this.test=test; //valor de tipo booleano
+    this.cad=new datos.CAD() //nueva instancia de capa de acceso a datos
+    
     this.agregarUsuario=function(nick){
         let res={"nick":-1};
         if (!this.usuarios[nick]){
@@ -13,6 +19,13 @@ function Sistema(){
         }
         return res;
         }
+    
+    this.obtenerOCrearUsuario=function(email,callback){
+        this.cad.buscarOCrearUsuario(email,function(res){
+            console.log("El usuario"+res.email+ "está registrado en el sistema");
+            callback(res);
+        })
+    }
         
 
     this.obtenerUsuarios=function(){
@@ -53,6 +66,13 @@ function Sistema(){
         res.num = Object.keys(this.usuarios).length;
         return res;
     }
+    
+    if(!this.test){
+        this.cad.conectar(function(){
+            console.log("Conectando a Mongo Atlas")
+        });
+    }
+  
 }
    function Usuario(nick){
     this.nick=nick;

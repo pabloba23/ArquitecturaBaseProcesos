@@ -5,7 +5,7 @@ describe('El sistema', function() {
    let sistema;
    
   beforeEach(function() {
-   sistema=new Sistema()
+   sistema=new Sistema(true)
 
    });
    
