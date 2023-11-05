@@ -1,4 +1,5 @@
 const datos = require("./cad.js");
+const correo=require("./email.js");
 
 function Sistema(test){
     this.usuarios={};  //this.usuarios=[]   esto seria un array normal basado en indices pero al usar {} es como un diccionario
@@ -20,8 +21,8 @@ function Sistema(test){
         return res;
         }
     
-    this.obtenerOCrearUsuario=function(email,callback){
-        this.cad.buscarOCrearUsuario(email,function(res){
+    this.usuarioGoogle=function(usr,callback){
+        this.cad.buscarOCrearUsuario(usr,function(res){
             console.log("El usuario"+res.email+ "está registrado en el sistema");
             callback(res);
         })
@@ -73,9 +74,63 @@ function Sistema(test){
         });
     }
   
+
+ 
+
+   this.registrarUsuario=function(obj,callback){
+    let modelo=this;
+    if (!obj.nick){
+        obj.nick=obj.email;
+    }
+    this.cad.buscarUsuario(obj,function(usr){
+        if (!usr){
+            //el usuario no existe, luego lo puedo registrar
+            obj.key=Date.now().toString();
+            obj.confirmada=false;
+            modelo.cad.insertarUsuario(obj,function(res){
+                callback(res);
+            });
+            correo.enviarEmail(obj.email,obj.key,"Confirmar cuenta");
+            //correo.enviarEmail("tu-cuenta","hola","Confirmar cuenta");
+        }
+        else
+        {
+            callback({"email":-1});
+        }
+    });
+   }
+
+   this.confirmarUsuario=function(obj,callback){
+        let modelo=this;
+        this.cad.buscarUsuario({"email": obj.email, "confirmada":false, "key":obj.key},function(usr){
+            if(usr){
+                usr.confirmada=true;
+                modelo.cad.actualizarUsuario(usr,function(res){
+                    callback({"email":res.email});
+                })
+            }
+            else{
+                callback({"email":-1});
+            }
+        })
+   }
+
+   this.loginUsuario=function(obj,callback){
+    this.cad.buscarUsuario({"email":obj.email,"confirmada":true},function(usr){
+        if(usr && usr.password==obj.password)
+        {
+            callback(usr);
+        }
+        else
+        {
+            callback({"email":-1});
+        }
+    });
 }
-   function Usuario(nick){
+
+}
+function Usuario(nick){
     this.nick=nick;
    }
- 
+
    module.exports.Sistema=Sistema

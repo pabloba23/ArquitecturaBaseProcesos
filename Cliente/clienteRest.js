@@ -110,4 +110,65 @@ function ClienteRest(){
         });
         }
 
+        this.registrarUsuario=function(email,password){
+            $.ajax({
+                type:'POST',
+                url:'/registrarUsuario',
+                data: JSON.stringify({"email":email,"password":password}),
+                success:function(data){
+                    if (data.nick!=-1){				
+                        console.log("Usuario "+data.nick+" ha sido registrado");
+                        // mostrar un mensaje diciendo: consulta tu email
+                        $.cookie("nick",data.nick);
+                        cw.limpiar();
+                        //cw.mostrarMensaje("Bienvenido al sistema, "+data.nick);
+                        //cw.mostrarLogin();
+                    }
+                    else{
+                        console.log("El nick está ocupado");
+                        //cw.mostrarMensajeLogin("El nick está ocupado");
+                    }
+                    },
+                    error:function(xhr, textStatus, errorThrown){
+                    console.log("Status: " + textStatus); 
+                    console.log("Error: " + errorThrown); 
+                    },
+                contentType:'application/json'
+            });
+        }
+
+        this.loginUsuario=function(email,password){
+            $.ajax({
+                type:'POST',
+                url:'/loginUsuario',
+                data: JSON.stringify({"email":email,"password":password}),
+                success:function(data){
+                    if (data.nick!=-1){				
+                        console.log("Usuario "+data.nick+" ha sido registrado");
+                        // mostrar un mensaje diciendo: consulta tu email
+                        //$.cookie("nick",data.nick);
+                        cw.limpiar();
+                        //cw.mostrarMensaje("Bienvenido al sistema, "+data.nick);
+                        
+                    }
+                    else{
+                        console.log("El nick está ocupado");
+                        cw.mostrarMensajeLogin("El nick está ocupado");
+                    }
+                    },
+                    error:function(xhr, textStatus, errorThrown){
+                    console.log("Status: " + textStatus); 
+                    console.log("Error: " + errorThrown); 
+                    },
+                contentType:'application/json'
+            });
+        }
+
+        this.cerrarSesion=function(){
+            $.getJSON("/cerrarSesion",function(){
+                console.log("Sesión cerrada");
+                $.removeCookie("nick");
+            });
+        }
+            
 }

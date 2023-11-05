@@ -1,6 +1,8 @@
 function ControlWeb() {
     //muestra un label con un boton
     this.mostrarAgregarUsuario = function () {
+
+        
         let cadena='<div id="mAU">';
         cadena = cadena + '<div class="card"><div class="card-body">';
         cadena = cadena +'<div class="form-group">';
@@ -10,6 +12,7 @@ function ControlWeb() {
         cadena=cadena+'<div><a href="/auth/google"><img src="./Cliente/img/web_light_sq_SU@1x.png" style="height:40px;"></a></div>';
         cadena = cadena + '</div>';
         cadena = cadena + '</div></div></div>'; 
+
         $("#au").append(cadena); //au = agregar usuario
 
         $("#btnAU").on("click", function () {
@@ -98,7 +101,7 @@ function ControlWeb() {
         cw.mostrarMsg("Bienvenido al sistema, "+nick);
         }
         else{
-        cw.mostrarAgregarUsuario();
+        cw.mostrarRegistro();
         cw.init();
         }
     }
@@ -108,6 +111,7 @@ function ControlWeb() {
         $.removeCookie("nick");
 
         location.reload();
+        rest.cerrarSesion();
         cw.mostrarMsg("Hasta luego usuario")
     }
 
@@ -128,8 +132,49 @@ function ControlWeb() {
         //console.log(user.email);
         //console.log(user.picture);
         rest.enviarJwt(jwt);
-
         }
+
+    this.limpiar=function(){
+        $("#mAU").remove();
+
+    }
        
+    this.mostrarRegistro=function(){
+        if ($.cookie('nick')){
+            return true;
+        };
+        $("fmRegistro").remove();
+        //en el div de index cargamos el html
+        $("#registro").load("./Cliente/registro.html",function(){
+            $("#btnRegistro").on("click",function(){
+                let email=$("#email").val();// recoger el valor del input text
+                let pwd=$("#pwd").val();// recoger el valor del input text
+                if (email && pwd){
+                    //debemos hacerlo
+                    rest.registrarUsuario(email,pwd)// llamar al servidor usando rest
+                    console.log(email+" "+pwd);
+                }
+            });
+        });
+    }
+
+        this.mostrarLogin=function(){
+            if ($.cookie('nick')){
+                return true;
+            };
+            $("#fmLogIn").remove();
+            $("#registro").load("./Cliente/login.html",function(){
+                $("#btnLogin").on("click",function(){
+                    let email=$("#email").val();
+                    let pwd=$("#pwd").val();
+                    if (email && pwd){
+                        rest.loginUsuario(email,pwd);
+                        console.log(email+" "+pwd);
+                    }
+                });
+            });
+        }
     
-}
+    }
+    
+

@@ -4,11 +4,20 @@ const express = require('express');
 const app = express();
 const passport=require("passport");
 const cookieSession=require("cookie-session");
+const LocalStrategy = require('passport-local').Strategy;
 require("./Servidor/passport-setup.js");
+
 const modelo = require("./Servidor/modelo.js");
 const args = process.argv.slice(2); 
 //para que las pruebas no se conecten a mongo
-
+const haIniciado=function(request,response,next){
+    if (request.user){
+    next();
+    }
+    else{
+    response.redirect("/")
+    }
+    }
 const PORT = process.env.PORT || 3005;
 app.use(express.static(__dirname + "/"));
 
@@ -18,8 +27,8 @@ app.use(cookieSession({
    }));
 
 app.use(passport.initialize());
-app.use(passport.session());
 
+app.use(passport.session());
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 
@@ -43,7 +52,7 @@ app.get("/agregarUsuario/:nick",function(request,response){
     response.send(res);
     });
 
-app.get("/obtenerUsuarios",function(request,response){
+app.get("/obtenerUsuarios",haIniciado,function(request,response){
        
     let res=sistema.obtenerUsuarios();
     response.send(res);
@@ -89,8 +98,8 @@ app.get('/google/callback',
 app.get("/good", function(request,response){
     let email=request.user.emails[0].value;
 
-    sistema.obtenerOCrearUsuario(email,function(obj){
-    response.cookie('nick',obj.email);
+    sistema.usuarioGoogle({"email":email},function(usr){
+    response.cookie('nick', usr.email);
     response.redirect('/');
     }); 
     });
@@ -104,7 +113,48 @@ app.get("/good", function(request,response){
     let jwt=request.body.jwt;
     let user=JSON.parse(atob(jwt.split(".")[1]));
     let email=user.email;
-    sistema.obtenerOCrearUsuario(email,function(obj){
+    sistema.usuarioGoogle({"email":email},function(obj){
     response.send({'nick':obj.email});
     })
    });
+
+   app.post("/registrarUsuario",function(request,response){
+        sistema.registrarUsuario(request.body,function(res){
+            response.send({"nick":res.email});
+        });
+    });
+
+  /*   app.post("/loginUsuario",function(request,response){
+        sistema.registrarUsuario(request.body,function(res){
+        response.send({"nick":res.email});
+        });
+        }); */
+    
+
+    app.post('/loginUsuario',passport.authenticate("local",{failureRedirect:"/fallo",successRedirect: "/ok"})
+        );
+        
+    app.get("/ok",function(request,response){
+        response.send({nick:request.user.email})
+    });
+        
+
+    app.get("/confirmarUsuario/:email/:key",function(request,response){
+            let email=request.params.email;
+            let key=request.params.key;
+            sistema.confirmarUsuario({"email":email,"key":key},function(usr){
+                if (usr.email!=-1){
+                    response.cookie('nick',usr.email);
+                }
+                response.redirect('/');
+              });
+            })
+
+    app.get("/cerrarSesion",haIniciado,function(request,response){
+        let nick=request.user.nick;
+        request.logout();
+        response.redirect("/");
+            if (nick){
+                sistema.eliminarUsuario(nick);
+            }
+    });
