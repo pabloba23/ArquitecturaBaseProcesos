@@ -1,5 +1,5 @@
 const nodemailer = require('nodemailer'); 
-const url= "http://localhost:3005/";
+const url= "https://arquitecturabaseprocesos-6bnn4osd7q-ew.a.run.app/";
 
 const transporter = nodemailer.createTransport({
     service: 'gmail',
