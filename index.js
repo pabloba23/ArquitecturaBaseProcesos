@@ -27,6 +27,19 @@ app.use(cookieSession({
    }));
 
 app.use(passport.initialize());
+passport.use(new
+    LocalStrategy({usernameField:"email",passwordField:"password"},
+    function(email,password,done){
+    sistema.loginUsuario({"email":email,"password":password},function(user){
+        if(user.email!=-1){
+            return done(null,user);
+        }
+        else{
+            return done(-1);
+        }
+        })
+    }
+    ));
 
 app.use(passport.session());
 app.use(bodyParser.urlencoded({extended:true}));
@@ -155,6 +168,6 @@ app.get("/good", function(request,response){
         request.logout();
         response.redirect("/");
             if (nick){
-                sistema.eliminarUsuario(nick);
+                sistema.deleteUsuario(nick);
             }
     });

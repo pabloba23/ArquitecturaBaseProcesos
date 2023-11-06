@@ -21,7 +21,7 @@
 
 </head>
 <body onload="ini();">
-    <nav  class="navbar navbar-expand-sm bg-dark navbar-dark"  style="height: 120px;">
+    <nav  class="navbar navbar-light" style="background-color: #e3f2fd;">
         <!-- Brand/logo -->
         <a class="navbar-brand" href="#"  style="font-size: 35px;">Sistema</a>
        
@@ -34,28 +34,22 @@
         <a class="nav-link" href="#" onclick="cw.mostrarAgregarUsuario()">Agregar usuario</a>
         </li>
         <li class="nav-item">
-        <a class="nav-link" href="#" onclick="cw.salir()">Salir</a>
+        <a class="nav-link" href="#" >Salir</a>
         </li>
         </ul>
        </nav>
        <div class="container-fluid">
-        <h3>ArquitecturaBase</h3>
-        <p></p>
-
-
+   
        </div>
     <div style="  position: absolute;
        top: 50%;
        left: 50%;
-       transform: translate(-50%, -50%);">
+       transform: translate(-95%, -50%);">
     <div id="au"></div> 
-    <div id="eu"></div>
-    <div id="ou"></div>
-    <div id="nu"></div>
-    <div id="ua"></div>
+
     <div id="registro"></div>
     <div id="msg"></div>
-
+    <div id="Exit"></div>
     
 </div>
     <script>
@@ -87,6 +81,7 @@
         cw=new ControlWeb();
         rest=new ClienteRest();
         cw.comprobarSesion();
+       
         };
 
     </script>

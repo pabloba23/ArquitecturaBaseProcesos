@@ -1,5 +1,6 @@
 const datos = require("./cad.js");
 const correo=require("./email.js");
+const bcrypt=require("bcrypt")
 
 function Sistema(test){
     this.usuarios={};  //this.usuarios=[]   esto seria un array normal basado en indices pero al usar {} es como un diccionario
@@ -120,6 +121,7 @@ function Sistema(test){
         if(usr && usr.password==obj.password)
         {
             callback(usr);
+            
         }
         else
         {

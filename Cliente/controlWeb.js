@@ -2,7 +2,7 @@ function ControlWeb() {
     //muestra un label con un boton
     this.mostrarAgregarUsuario = function () {
 
-        
+        cw.limpiar();
         let cadena='<div id="mAU">';
         cadena = cadena + '<div class="card"><div class="card-body">';
         cadena = cadena +'<div class="form-group">';
@@ -16,11 +16,12 @@ function ControlWeb() {
         $("#au").append(cadena); //au = agregar usuario
 
         $("#btnAU").on("click", function () {
-
-
+            
+            
             let nick = $("#nick").val();
             if (nick) {
-                $("#mAU").remove(); //Se pone al principio por si se llama de sitintos sitios
+                
+                 //Se pone al principio por si se llama de sitintos sitios
                 rest.agregarUsuario(nick)
             }
 
@@ -92,6 +93,7 @@ function ControlWeb() {
         $('#mMsg').remove()
         let cadena = '<h2 id="mMsg">' + msg + '</h2>';
         $('#msg').append(cadena);
+        this.salir()
 
     }
     this.comprobarSesion=function(){
@@ -107,12 +109,26 @@ function ControlWeb() {
     }
 
 
-    this.salir = function () {
-        $.removeCookie("nick");
+    this.salir = function() {
+        // Boton de LogOut
+        let cadena = '<div class="form-group" id="mExit">';
+        
+        cadena = cadena + '<button id="btnExit" type="button" class="btn btn-primary">Cerrar Sesion</button>';
+        cadena = cadena + '</div';
 
-        location.reload();
-        rest.cerrarSesion();
-        cw.mostrarMsg("Hasta luego usuario")
+        $("#Exit").append(cadena);
+
+        $("#btnExit").on("click", function () {
+             // Mostrar un mensaje de confirmación al usuario
+            if (confirm("¿Estás seguro de que deseas salir?")) {
+                // Si el usuario confirma, eliminar "nick" del localStorage y recargar la página
+                $.removeCookie("nick");
+                location.reload();
+                rest.cerrarSesion();
+
+            }
+        });
+
     }
 
     this.init=function(){
@@ -136,6 +152,9 @@ function ControlWeb() {
 
     this.limpiar=function(){
         $("#mAU").remove();
+        $("#registro").remove();
+        $("#fmLogIn").remove();
+
 
     }
        
@@ -150,7 +169,7 @@ function ControlWeb() {
                 let email=$("#email").val();// recoger el valor del input text
                 let pwd=$("#pwd").val();// recoger el valor del input text
                 if (email && pwd){
-                    //debemos hacerlo
+                 
                     rest.registrarUsuario(email,pwd)// llamar al servidor usando rest
                     console.log(email+" "+pwd);
                 }
@@ -170,9 +189,28 @@ function ControlWeb() {
                     if (email && pwd){
                         rest.loginUsuario(email,pwd);
                         console.log(email+" "+pwd);
+                        
                     }
                 });
             });
+        }
+
+        this.mostrarFormulario = function(formularioId) {
+           
+            if (formularioId === 'fmRegistro') {
+                // Muestra el formulario de registro
+                this.mostrarRegistro()
+            } else if (formularioId === 'fmLogIn') {
+                // Muestra el formulario de inicio de sesión
+                this.mostrarLogin()
+                
+                 // Para que permita loguearse con google
+                //this.mostrarGoogle() 
+            } else {
+                // Mostrar un mensaje de error si el formulario no es válido
+
+                console.log('Formulario no válido');
+            }
         }
     
     }

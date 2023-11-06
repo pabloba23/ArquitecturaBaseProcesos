@@ -148,7 +148,8 @@ function ClienteRest(){
                         // mostrar un mensaje diciendo: consulta tu email
                         //$.cookie("nick",data.nick);
                         cw.limpiar();
-                        //cw.mostrarMensaje("Bienvenido al sistema, "+data.nick);
+                        cw.mostrarMsg("Bienvenido al sistema, "+data.nick);
+                        
                         
                     }
                     else{
