@@ -104,7 +104,7 @@ function ControlWeb() {
         }
         else{
         cw.mostrarRegistro();
-        cw.init();
+        //cw.init();
         }
     }
 
@@ -134,6 +134,7 @@ function ControlWeb() {
     this.init=function(){
         let cw=this;
         google.accounts.id.initialize({
+        //client_id:"440901487-q172mab1vr7fsu18qbm1up3rogrsgjtr.apps.googleusercontent.com", 
         client_id:"440901487-c28nkgmcdl1sbbht79ucq3b4v6mf6rlg.apps.googleusercontent.com", //prod
         auto_select:false,
         callback:cw.handleCredentialsResponse
@@ -185,6 +186,7 @@ function ControlWeb() {
             $("#registro").load("./Cliente/login.html",function(){
                 $("#btnLogin").on("click",function(){
                     let email=$("#email").val();
+               
                     let pwd=$("#pwd").val();
                     if (email && pwd){
                         rest.loginUsuario(email,pwd);

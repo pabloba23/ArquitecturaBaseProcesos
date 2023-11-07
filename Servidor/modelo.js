@@ -94,7 +94,7 @@ function Sistema(test){
           // Sustituye la clave original con el hash
           obj.password = hash;
       
-          modelo.cad.buscarUsuario(obj, function (usr) {
+          modelo.cad.buscarUsuario({"email": obj.email}, function (usr) {
             if (!usr) {
               // El usuario no existe, luego lo puedo registrar
               obj.key = Date.now().toString();
@@ -104,6 +104,7 @@ function Sistema(test){
               });
               correo.enviarEmail(obj.email, obj.key, "Confirmar cuenta");
             } else {
+              
               callback({ "email": -1 });
             }
           });

@@ -87,7 +87,7 @@ function ClienteRest(){
         url:'/enviarJwt',
         data: JSON.stringify({"jwt":jwt}),
         success:function(data){
-        let msg="El nick "+nick+" está ocupado";
+        let msg="El nick "+data.nick+" está ocupado";
         if (data.nick!=-1){
         console.log("Usuario "+data.nick+" ha sido registrado");
         msg="Bienvenido al sistema, "+data.nick;
@@ -120,9 +120,9 @@ function ClienteRest(){
                         console.log("Usuario "+data.nick+" ha sido registrado");
                         // mostrar un mensaje diciendo: consulta tu email
                         $.cookie("nick",data.nick);
-                        cw.limpiar();
+                        
                         //cw.mostrarMensaje("Bienvenido al sistema, "+data.nick);
-                        //cw.mostrarLogin();
+                        cw.mostrarLogin();
                     }
                     else{
                         console.log("El nick está ocupado");
@@ -154,7 +154,8 @@ function ClienteRest(){
                     }
                     else{
                         console.log("El nick está ocupado");
-                        cw.mostrarMensajeLogin("El nick está ocupado");
+                        cw.limpiar()
+                        cw.mostrarMsg("Correo o clave incorrecta.");
                     }
                     },
                     error:function(xhr, textStatus, errorThrown){

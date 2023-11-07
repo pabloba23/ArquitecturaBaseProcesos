@@ -1,4 +1,5 @@
 const nodemailer = require('nodemailer'); 
+//const url 
 const url= "https://arquitecturabaseprocesos-6bnn4osd7q-ew.a.run.app/";
 
 const transporter = nodemailer.createTransport({

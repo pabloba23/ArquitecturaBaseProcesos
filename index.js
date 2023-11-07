@@ -31,12 +31,10 @@ passport.use(new
     LocalStrategy({usernameField:"email",passwordField:"password"},
     function(email,password,done){
     sistema.loginUsuario({"email":email,"password":password},function(user){
-        if(user.email!=-1){
+
             return done(null,user);
-        }
-        else{
-            return done(-1);
-        }
+  
+
         })
     }
     ));
@@ -104,6 +102,12 @@ app.get("/auth/google",passport.authenticate('google', { scope: ['profile','emai
 
 app.get('/google/callback',
  passport.authenticate('google', { failureRedirect: '/fallo' }),
+ function(req, res) {
+    res.redirect('/good');
+});
+
+app.post('/oneTap/callback',
+ passport.authenticate('google-one-tap', { failureRedirect: '/fallo' }),
  function(req, res) {
     res.redirect('/good');
 });
