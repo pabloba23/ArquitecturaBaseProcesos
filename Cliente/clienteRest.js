@@ -119,14 +119,18 @@ function ClienteRest(){
                     if (data.nick!=-1){				
                         console.log("Usuario "+data.nick+" ha sido registrado");
                         // mostrar un mensaje diciendo: consulta tu email
-                        $.cookie("nick",data.nick);
-                        
+                        //$.cookie("nick",data.nick);
+                        //cw.limpiar();
                         //cw.mostrarMensaje("Bienvenido al sistema, "+data.nick);
+                        
                         cw.mostrarLogin();
                     }
                     else{
                         console.log("El nick está ocupado");
-                        //cw.mostrarMensajeLogin("El nick está ocupado");
+
+                        
+                        
+                        cw.mostrarMsg("El nick está ocupado");
                     }
                     },
                     error:function(xhr, textStatus, errorThrown){
@@ -153,7 +157,7 @@ function ClienteRest(){
                         
                     }
                     else{
-                        console.log("El nick está ocupado");
+                        console.log("Correo o clave incorrecta");
                         cw.limpiar()
                         cw.mostrarMsg("Correo o clave incorrecta.");
                     }
@@ -164,6 +168,10 @@ function ClienteRest(){
                     },
                 contentType:'application/json'
             });
+        }
+
+        this.volverPantallaAnterior=function() {
+            window.history.back();
         }
 
         this.cerrarSesion=function(){

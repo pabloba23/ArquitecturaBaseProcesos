@@ -3,18 +3,18 @@ function ControlWeb() {
     this.mostrarAgregarUsuario = function () {
 
         cw.limpiar();
-        let cadena='<div id="mAU">';
-        cadena = cadena + '<div class="card"><div class="card-body">';
-        cadena = cadena +'<div class="form-group">';
-        cadena = cadena + '<label for="nick">Nick:</label>';
-        cadena = cadena + '<p><input type="text" class="form-control" id="nick" placeholder="introduce un nick"></p>';
-        cadena = cadena + '<button id="btnAU" type="submit" class="btn btn-primary">Submit</button>';
-        cadena=cadena+'<div><a href="/auth/google"><img src="./Cliente/img/web_light_sq_SU@1x.png" style="height:40px;"></a></div>';
-        cadena = cadena + '</div>';
-        cadena = cadena + '</div></div></div>'; 
+        let cadena = '<div style="border: 2px solid #0d47a1; background-color: #e3f2fd; padding: 70px; border-radius: 5px;">';
+        cadena += '<div id="mAU">';
+        cadena += '<div class="form-group">';
+        cadena += '<label for="nick">Nick:</label>';
+        cadena += '<p><input type="text" class="form-control" id="nick" placeholder="introduce un nick"></p>';
+        cadena += '<button id="btnAU" type="submit" class="btn btn-primary">Submit</button>';
+        cadena += '<div><a href="/auth/google"><img src="./Cliente/img/web_light_sq_SU@1x.png" style="height:40px;"></a></div>';
+        cadena += '</div></div>';
+        
 
         $("#au").append(cadena); //au = agregar usuario
-
+       
         $("#btnAU").on("click", function () {
             
             
@@ -89,11 +89,14 @@ function ControlWeb() {
         });
     }
     this.mostrarMsg = function (msg) {
-
+        cw.limpiar()
         $('#mMsg').remove()
         let cadena = '<h2 id="mMsg">' + msg + '</h2>';
         $('#msg').append(cadena);
-        this.salir()
+     
+            this.salir()
+        
+        
 
     }
     this.comprobarSesion=function(){
@@ -131,6 +134,28 @@ function ControlWeb() {
 
     }
 
+    this.volver = function() {
+        // Boton de LogOut
+        let cadena = '<div class="form-group" id="mExit">';
+        
+        cadena = cadena + '<button id="btnExit" type="button" class="btn btn-primary">Vuelta atrás</button>';
+        cadena = cadena + '</div';
+
+        $("#Exit").append(cadena);
+
+        $("#btnExit").on("click", function () {
+             // Mostrar un mensaje de confirmación al usuario
+             
+            if (confirm("¿Estás seguro de que quieres volver a la pantalla anterior?")) {
+                // Si el usuario confirma, eliminar "nick" del localStorage y recargar la página
+                
+                rest.volverPantallaAnterior()
+
+            }
+        });
+
+    }
+
     this.init=function(){
         let cw=this;
         google.accounts.id.initialize({
@@ -152,8 +177,9 @@ function ControlWeb() {
         }
 
     this.limpiar=function(){
+       
         $("#mAU").remove();
-        $("#registro").remove();
+        $("#fmRegistro").remove();
         $("#fmLogIn").remove();
 
 
@@ -163,16 +189,19 @@ function ControlWeb() {
         if ($.cookie('nick')){
             return true;
         };
+        cw.limpiar();
         $("fmRegistro").remove();
         //en el div de index cargamos el html
         $("#registro").load("./Cliente/registro.html",function(){
-            $("#btnRegistro").on("click",function(){
+            $("#btnRegistro").on("click",function(event){
+                event.preventDefault();
                 let email=$("#email").val();// recoger el valor del input text
                 let pwd=$("#pwd").val();// recoger el valor del input text
                 if (email && pwd){
                  
                     rest.registrarUsuario(email,pwd)// llamar al servidor usando rest
-                    console.log(email+" "+pwd);
+                    console.log(email+" "+pwd); 
+                    
                 }
             });
         });
@@ -184,7 +213,8 @@ function ControlWeb() {
             };
             $("#fmLogIn").remove();
             $("#registro").load("./Cliente/login.html",function(){
-                $("#btnLogin").on("click",function(){
+                $("#btnLogin").on("click",function(event){
+                    event.preventDefault();
                     let email=$("#email").val();
                
                     let pwd=$("#pwd").val();

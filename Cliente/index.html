@@ -21,7 +21,7 @@
 
 </head>
 <body onload="ini();">
-    <nav  class="navbar navbar-light" style="background-color: #e3f2fd;">
+    <nav class="navbar navbar-light" style="background-color: #e3f2fd; border: 2px solid #0d47a1;">
         <!-- Brand/logo -->
         <a class="navbar-brand" href="#"  style="font-size: 35px;">Sistema</a>
        
@@ -34,7 +34,7 @@
         <a class="nav-link" href="#" onclick="cw.mostrarAgregarUsuario()">Agregar usuario</a>
         </li>
         <li class="nav-item">
-        <a class="nav-link" href="#" >Salir</a>
+        <a class="nav-link" href="#" id="Exit"></a>
         </li>
         </ul>
        </nav>
@@ -44,12 +44,12 @@
     <div style="  position: absolute;
        top: 50%;
        left: 50%;
-       transform: translate(-80%, -40%);">
+       transform: translate(-50%, -40%);">
     <div id="au"></div> 
 
     <div id="registro"></div>
     <div id="msg"></div>
-    <div id="Exit"></div>
+    
     
 
 </div>
