@@ -2,6 +2,9 @@ const fs=require("fs");
 const bodyParser=require("body-parser");
 const express = require('express');
 const app = express();
+const httpServer = require ('http').Server(app);
+const { Server } = require("socket.io");//aplicacion en tiempo real 
+
 const passport=require("passport");
 const cookieSession=require("cookie-session");
 const LocalStrategy = require('passport-local').Strategy;
@@ -18,6 +21,11 @@ const haIniciado=function(request,response,next){
     response.redirect("/")
     }
     }
+
+const moduloWS = require ("./Servidor/servidorWS.js");
+let ws = new moduloWS.ServidorWS();
+let io= new Server();    
+
 const PORT = process.env.PORT || 3005;
 app.use(express.static(__dirname + "/"));
 
@@ -57,11 +65,11 @@ app.get("/", function(request,response){
     
 });
 
-app.get("/agregarUsuario/:nick",function(request,response){
-    let nick=request.params.nick;
-    let res=sistema.agregarUsuario(nick);
+/* app.get("/agregarUsuario/:email",function(request,response){
+    let email=request.params.email;
+    let res=sistema.agregarUsuario(email);
     response.send(res);
-    });
+    }); */
 
 app.get("/obtenerUsuarios",haIniciado,function(request,response){
        
@@ -70,31 +78,38 @@ app.get("/obtenerUsuarios",haIniciado,function(request,response){
         });
 
 
-app.get("/usuarioActivo/:nick",function(request,response){
+app.get("/usuarioActivo/:email",haIniciado,function(request,response){
      
-    let nick=request.params.nick;
-    let res=sistema.usuarioActivo(nick);
+    let email=request.params.email;
+    let res=sistema.usuarioActivo(email);
     response.send(res);
      });
 
-app.get("/numeroUsuarios",function(request,response){
+app.get("/numeroUsuarios",haIniciado,function(request,response){
        
     let res=sistema.numeroUsuarios();
     response.send(res);
     });
 
-    app.get("/deleteUsuario/:nick",function(request,response){
-    let nick=request.params.nick;   
-    let res=sistema.deleteUsuario(nick);
+    app.get("/deleteUsuario/:email",haIniciado,function(request,response){
+    let email=request.params.email;   
+    let res=sistema.deleteUsuario(email);
     response.send(res);
 
     });
 
     
-app.listen(PORT, () => {
-console.log(`App está escuchando en el puerto ${PORT}`);
-console.log('Ctrl+C para salir');
+// app.listen(PORT, () => { 
+// console.log(`App está escuchando en el puerto ${PORT}`);
+// console.log('Ctrl+C para salir');
+// });
+
+httpServer.listen(PORT, () => {
+    console.log(`App está escuchando en el puerto ${PORT}`);
+    console.log('Ctrl+C para salir');
 });
+io.listen(httpServer);
+ws.lanzarServidor(io);
 
 
 app.get("/auth/google",passport.authenticate('google', { scope: ['profile','email'] }));
@@ -116,14 +131,14 @@ app.get("/good", function(request,response){
     let email=request.user.emails[0].value;
 
     sistema.usuarioGoogle({"email":email},function(usr){
-    response.cookie('nick', usr.email);
+    response.cookie('email', usr.email);
     response.redirect('/');
     }); 
     });
 
 
    app.get("/fallo",function(request,response){
-    response.send({nick:"nook"})
+    response.send({email:"nook"})
    });
 
    app.post('/enviarJwt',function(request,response){
@@ -131,19 +146,19 @@ app.get("/good", function(request,response){
     let user=JSON.parse(atob(jwt.split(".")[1]));
     let email=user.email;
     sistema.usuarioGoogle({"email":email},function(obj){
-    response.send({'nick':obj.email});
+    response.send({'email':obj.email});
     })
    });
 
    app.post("/registrarUsuario",function(request,response){
         sistema.registrarUsuario(request.body,function(res){
-            response.send({"nick":res.email});
+            response.send({"email":res.email});
         });
     });
 
   /*   app.post("/loginUsuario",function(request,response){
         sistema.registrarUsuario(request.body,function(res){
-        response.send({"nick":res.email});
+        response.send({"email":res.email});
         });
         }); */
     
@@ -152,7 +167,7 @@ app.get("/good", function(request,response){
         );
         
     app.get("/ok",function(request,response){
-        response.send({nick:request.user.email})
+        response.send({email:request.user.email})
     });
         
 
@@ -161,17 +176,17 @@ app.get("/good", function(request,response){
             let key=request.params.key;
             sistema.confirmarUsuario({"email":email,"key":key},function(usr){
                 if (usr.email!=-1){
-                    response.cookie('nick',usr.email);
+                    response.cookie('email',usr.email);
                 }
                 response.redirect('/');
               });
             })
 
     app.get("/cerrarSesion",haIniciado,function(request,response){
-        let nick=request.user.nick;
+        let email=request.user.email;
         request.logout();
         response.redirect("/");
-            if (nick){
-                sistema.deleteUsuario(nick);
+            if (email){
+                sistema.deleteUsuario(email);
             }
     });

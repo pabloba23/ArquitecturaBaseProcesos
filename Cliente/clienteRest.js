@@ -1,5 +1,5 @@
 function ClienteRest(){
-    this.agregarUsuario=function(nick){
+/*     this.agregarUsuario=function(nick){
     var cli=this;
     $.getJSON("/agregarUsuario/"+nick,function(data){
     let msg="";
@@ -17,9 +17,9 @@ function ClienteRest(){
         cw.mostrarMsg(msg);
     });
 
-    }
+    } */
 
-    this.agregarUsuario2=function(nick){
+/*     this.agregarUsuario2=function(nick){
         $.ajax({
             type:'GET',
             url:'/agregarUsuario/'+nick,
@@ -37,8 +37,8 @@ function ClienteRest(){
             },
             contentType:'application/json'
             });
-    }
-    this.obtenerUsuarios=function(nick){
+    } */
+    this.obtenerUsuarios=function(email){
         var cli=this;
         $.getJSON("/obtenerUsuarios/",function(data){
         console.log(data)
@@ -47,7 +47,7 @@ function ClienteRest(){
         
         }
 
-    this.numeroUsuarios=function(nick){
+    this.numeroUsuarios=function(email){
         var cli=this;
         $.getJSON("/numeroUsuarios/",function(data){
         console.log("Número de usuarios que estan en el sistema es:"+data.num)
@@ -55,26 +55,26 @@ function ClienteRest(){
             //Se dibuja la espera la ruleta de carga por ej
             
         }
-    this.usuarioActivo=function(nick){
+    this.usuarioActivo=function(email){
         var cli=this;
-        $.getJSON("/usuarioActivo/"+nick,function(data){
+        $.getJSON("/usuarioActivo/"+email,function(data){
         if(data.activo){
-                    console.log("El usuario "+nick+" esta activo");
+                    console.log("El usuario "+email+" esta activo");
                 }else{
-                    console.log("El usuario "+nick+" no esta activo");
+                    console.log("El usuario "+email+" no esta activo");
                 }
         })
                 //Se dibuja la espera la ruleta de carga por ej
                 
     }
 
-    this.deleteUsuario=function(nick){
+    this.deleteUsuario=function(email){
         var cli=this;
-        $.getJSON("/deleteUsuario/"+nick,function(data){
-        if(data.nick!=-1){
-                    console.log("El usuario "+nick+" ha sido eliminado");
+        $.getJSON("/deleteUsuario/"+email,function(data){
+        if(data.email!=-1){
+                    console.log("El usuario "+email+" ha sido eliminado");
                 }else{
-                    console.log("El usuario "+nick+" no existe y no ha sido eliminado");
+                    console.log("El usuario "+email+" no existe y no ha sido eliminado");
                 }
         })
                 //Se dibuja la espera la ruleta de carga por ej
@@ -87,15 +87,17 @@ function ClienteRest(){
         url:'/enviarJwt',
         data: JSON.stringify({"jwt":jwt}),
         success:function(data){
-        let msg="El nick "+data.nick+" está ocupado";
-        if (data.nick!=-1){
-        console.log("Usuario "+data.nick+" ha sido registrado");
-        msg="Bienvenido al sistema, "+data.nick;
-        $.cookie("nick",data.nick);
+        let msg="El email "+data.email+" está ocupado";
+        if (data.email!=-1){
+        console.log("Usuario "+data.email+" ha sido registrado");
+        cw.mostrarModal("Usuario "+data.email+" ha sido registrado")
+        msg="Bienvenido al sistema, "+data.email;
+        $.cookie("email",data.email);
         }
         else{
 
-        console.log("El nick ya está ocupado");
+        console.log("El email ya está ocupado");
+        cw.mostrarModal("Usuario "+data.email+" esta ocupado")
         }
         cw.limpiar();
         cw.mostrarMsg(msg);
@@ -116,21 +118,18 @@ function ClienteRest(){
                 url:'/registrarUsuario',
                 data: JSON.stringify({"email":email,"password":password}),
                 success:function(data){
-                    if (data.nick!=-1){				
-                        console.log("Usuario "+data.nick+" ha sido registrado");
+                    if (data.email!=-1){				
+                        console.log("Usuario "+data.email+" ha sido registrado");
                         // mostrar un mensaje diciendo: consulta tu email
-                        //$.cookie("nick",data.nick);
+                        //$.cookie("email",data.email);
                         //cw.limpiar();
-                        //cw.mostrarMensaje("Bienvenido al sistema, "+data.nick);
+                        //cw.mostrarMensaje("Bienvenido al sistema, "+data.email);
                         
                         cw.mostrarLogin();
                     }
                     else{
-                        console.log("El nick está ocupado");
-
-                        
-                        
-                        cw.mostrarMsg("El nick está ocupado");
+                        console.log("El email está ocupado");
+                        cw.mostrarModal("El email está ocupado")
                     }
                     },
                     error:function(xhr, textStatus, errorThrown){
@@ -147,12 +146,12 @@ function ClienteRest(){
                 url:'/loginUsuario',
                 data: JSON.stringify({"email":email,"password":password}),
                 success:function(data){
-                    if (data.nick!=-1){				
-                        console.log("Usuario "+data.nick+" ha sido registrado");
+                    if (data.email!=-1){				
+                        console.log("Usuario "+data.email+" ha sido registrado");
                         // mostrar un mensaje diciendo: consulta tu email
-                        //$.cookie("nick",data.nick);
+                        //$.cookie("email",data.email);
                         cw.limpiar();
-                        cw.mostrarMsg("Bienvenido al sistema, "+data.nick);
+                        cw.mostrarMsg("Bienvenido al sistema, "+data.email);
                         
                         
                     }
@@ -177,7 +176,7 @@ function ClienteRest(){
         this.cerrarSesion=function(){
             $.getJSON("/cerrarSesion",function(){
                 console.log("Sesión cerrada");
-                $.removeCookie("nick");
+                $.removeCookie("email");
             });
         }
             

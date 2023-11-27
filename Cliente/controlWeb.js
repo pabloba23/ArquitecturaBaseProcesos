@@ -1,34 +1,34 @@
 function ControlWeb() {
     //muestra un label con un boton
-    this.mostrarAgregarUsuario = function () {
+    // this.mostrarAgregarUsuario = function () {
 
-        cw.limpiar();
-        let cadena = '<div style="border: 2px solid #0d47a1; background-color: #e3f2fd; padding: 70px; border-radius: 5px;">';
-        cadena += '<div id="mAU">';
-        cadena += '<div class="form-group">';
-        cadena += '<label for="nick">Nick:</label>';
-        cadena += '<p><input type="text" class="form-control" id="nick" placeholder="introduce un nick"></p>';
-        cadena += '<button id="btnAU" type="submit" class="btn btn-primary">Submit</button>';
-        cadena += '<div><a href="/auth/google"><img src="./Cliente/img/web_light_sq_SU@1x.png" style="height:40px;"></a></div>';
-        cadena += '</div></div>';
+    //     cw.limpiar();
+    //     let cadena = '<div style="border: 2px solid #0d47a1; background-color: #e3f2fd; padding: 70px; border-radius: 5px;">';
+    //     cadena += '<div id="mAU">';
+    //     cadena += '<div class="form-group">';
+    //     cadena += '<label for="email">email:</label>';
+    //     cadena += '<p><input type="text" class="form-control" id="email" placeholder="introduce un email"></p>';
+    //     cadena += '<button id="btnAU" type="submit" class="btn btn-primary">Submit</button>';
+    //     cadena += '<div><a href="/auth/google"><img src="./Cliente/img/web_light_sq_SU@1x.png" style="height:40px;"></a></div>';
+    //     cadena += '</div></div>';
         
 
-        $("#au").append(cadena); //au = agregar usuario
+    //     $("#au").append(cadena); //au = agregar usuario
        
-        $("#btnAU").on("click", function () {
+    //     $("#btnAU").on("click", function () {
             
             
-            let nick = $("#nick").val();
-            if (nick) {
+    //         let email = $("#email").val();
+    //         if (email) {
                 
-                 //Se pone al principio por si se llama de sitintos sitios
-                rest.agregarUsuario(nick)
-            }
+    //              //Se pone al principio por si se llama de sitintos sitios
+    //             rest.agregarUsuario(email)
+    //         }
 
 
-        });
+    //     });
 
-    }
+    // }
 
 
     this.mostrarObtenerUsuarios = function () {
@@ -59,32 +59,32 @@ function ControlWeb() {
 
     this.mostrarUsuarioActivo = function () {
         let cadena = '<div class="form-row" id="mUA">';
-        cadena = cadena + '<label for="nick">Introduce el nick para saber si está activo o no:</label>';
-        cadena = cadena + '<input type="text" class="form-control" id="nick">';
+        cadena = cadena + '<label for="email">Introduce el email para saber si está activo o no:</label>';
+        cadena = cadena + '<input type="text" class="form-control" id="email">';
         cadena = cadena + '<button id="btnUA" type="submit" class="btn btn-primary">¿Esta Activo?</button>';
         cadena = cadena + '</div>';
 
         $("#ua").append(cadena); //ua = usuario activo
 
         $("#btnUA").on("click", function () {
-            let nick = $("#nick").val();
-            rest.usuarioActivo(nick)
+            let email = $("#email").val();
+            rest.usuarioActivo(email)
             $("#mUA").remove();
         });
     }
 
     this.mostrarEliminarUsuario = function () {
         let cadena = '<div class="form-row" id="mEU">';
-        cadena = cadena + '<label for="nick">Introduce el nick a eliminar:</label>';
-        cadena = cadena + '<input type="text" class="form-control" id="nick">';
+        cadena = cadena + '<label for="email">Introduce el email a eliminar:</label>';
+        cadena = cadena + '<input type="text" class="form-control" id="email">';
         cadena = cadena + '<button id="btnEU" type="submit" class="btn btn-primary">Eliminar</button>';
         cadena = cadena + '</div>';
 
         $("#eu").append(cadena); //eu = eliminar usuario
 
         $("#btnEU").on("click", function () {
-            let nick = $("#nick").val();
-            rest.deleteUsuario(nick)
+            let email = $("#email").val();
+            rest.deleteUsuario(email)
             $("#mEU").remove();
         });
     }
@@ -100,10 +100,10 @@ function ControlWeb() {
 
     }
     this.comprobarSesion=function(){
-        //let nick=localStorage.getItem("nick");
-        let nick=$.cookie("nick");
-        if (nick){
-        cw.mostrarMsg("Bienvenido al sistema, "+nick);
+        //let email=localStorage.getItem("email");
+        let email=$.cookie("email");
+        if (email){
+        cw.mostrarMsg("Bienvenido al sistema, "+email);
         }
         else{
         cw.mostrarRegistro();
@@ -124,8 +124,8 @@ function ControlWeb() {
         $("#btnExit").on("click", function () {
              // Mostrar un mensaje de confirmación al usuario
             if (confirm("¿Estás seguro de que deseas salir?")) {
-                // Si el usuario confirma, eliminar "nick" del localStorage y recargar la página
-                $.removeCookie("nick");
+                // Si el usuario confirma, eliminar "email" del localStorage y recargar la página
+                $.removeCookie("email");
                 location.reload();
                 rest.cerrarSesion();
 
@@ -147,7 +147,7 @@ function ControlWeb() {
              // Mostrar un mensaje de confirmación al usuario
              
             if (confirm("¿Estás seguro de que quieres volver a la pantalla anterior?")) {
-                // Si el usuario confirma, eliminar "nick" del localStorage y recargar la página
+                // Si el usuario confirma, eliminar "email" del localStorage y recargar la página
                 
                 rest.volverPantallaAnterior()
 
@@ -159,8 +159,8 @@ function ControlWeb() {
     this.init=function(){
         let cw=this;
         google.accounts.id.initialize({
-        //client_id:"440901487-q172mab1vr7fsu18qbm1up3rogrsgjtr.apps.googleusercontent.com", 
-        client_id:"440901487-c28nkgmcdl1sbbht79ucq3b4v6mf6rlg.apps.googleusercontent.com", //prod
+        client_id:"440901487-q172mab1vr7fsu18qbm1up3rogrsgjtr.apps.googleusercontent.com", 
+        //client_id:"440901487-c28nkgmcdl1sbbht79ucq3b4v6mf6rlg.apps.googleusercontent.com", //prod
         auto_select:false,
         callback:cw.handleCredentialsResponse
         });
@@ -186,7 +186,7 @@ function ControlWeb() {
     }
        
     this.mostrarRegistro=function(){
-        if ($.cookie('nick')){
+        if ($.cookie('email')){
             return true;
         };
         cw.limpiar();
@@ -208,7 +208,7 @@ function ControlWeb() {
     }
 
         this.mostrarLogin=function(){
-            if ($.cookie('nick')){
+            if ($.cookie('email')){
                 return true;
             };
             $("#fmLogIn").remove();
@@ -243,6 +243,13 @@ function ControlWeb() {
 
                 console.log('Formulario no válido');
             }
+        }
+
+        this.mostrarModal = function(msg){//muestra que esta ocupado
+            $("#msgModal").remove();
+            let cadena="<div id='msgModal'>"+msg+"</div>";
+            $('#bModal').append(cadena);
+            $('#miModal').modal();
         }
     
     }

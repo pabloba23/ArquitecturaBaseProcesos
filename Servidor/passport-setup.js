@@ -27,8 +27,12 @@ passport.use(new GoogleStrategy({
 passport.use(
     new GoogleOneTapStrategy(
       {
-        clientID: "440901487-mcubd2k2don88i6bl8f72kujb4fjlcfc.apps.googleusercontent.com", // your google client ID
-        clientSecret: "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", // your google client secret
+       /*  clientID: "440901487-mcubd2k2don88i6bl8f72kujb4fjlcfc.apps.googleusercontent.com", // your google client ID
+        clientSecret: "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", // your google client secret */ /*local*/
+
+        clientID: "440901487-8m6hbgqs4lmk79cs1q1li45d8fnvisj2.apps.googleusercontent.com", // your google client ID
+        clientSecret: "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", // your google client secret
+
         verifyCsrfToken: false, // whether to validate the csrf token or not
       },
       function (profile, done) {
